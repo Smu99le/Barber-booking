@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Заблоковані дати</h1>
+
+<form method="post" class="mb-3 row g-2">
+    <div class="col-auto">
+        <label>З</label>
+        <input type="date" name="date_from" class="form-control" required>
+    </div>
+    <div class="col-auto">
+        <label>До</label>
+        <input type="date" name="date_to" class="form-control" required>
+    </div>
+    <div class="col-auto">
+        <label>Причина</label>
+        <input type="text" name="reason" class="form-control" placeholder="Причина (необов'язково)">
+    </div>
+    <div class="col-auto align-self-end">
+        <button type="submit" class="btn btn-primary">Заблокувати</button>
+    </div>
+</form>
+
+<table class="table">
+  <thead>
+    <tr><th>Дата</th><th>Причина</th><th>Дія</th></tr>
+  </thead>
+  <tbody>
+    {% for bd in blocked %}
+    <tr>
+      <td>{{ bd.date.strftime('%Y-%m-%d') }}</td>
+      <td>{{ bd.reason }}</td>
+      <td>
+        <form method="post" action="{{ url_for('delete_blocked', bd_id=bd.id) }}" onsubmit="return confirm('Скаувати вихідні?');">
+          <button class="btn btn-danger btn-sm">Видалити</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

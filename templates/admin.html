@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Адмін — всі записи</h1>
+
+<!-- Кнопка для переходу на сторінку блокованих дат -->
+<a href="{{ url_for('blocked_dates') }}" class="btn btn-warning mb-3">Блоковані дати / Вихідні</a>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><a href="{{ url_for('admin', sort_by='id', order=next_order('id')) }}">ID</a></th>
+      <th><a href="{{ url_for('admin', sort_by='start_at', order=next_order('start_at')) }}">Дата/час</a></th>
+      <th><a href="{{ url_for('admin', sort_by='client_name', order=next_order('client_name')) }}">Клієнт</a></th>
+      <th><a href="{{ url_for('admin', sort_by='service', order=next_order('service')) }}">Послуга</a></th>
+      <th><a href="{{ url_for('admin', sort_by='phone', order=next_order('phone')) }}">Телефон</a></th>
+      <th>Дія</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for a in appts %}
+    <tr>
+      <td>{{ a.id }}</td>
+      <td>{{ a.start_at.strftime("%Y-%m-%d %H:%M") }}</td>
+      <td>{{ a.client_name }}</td>
+      <td>{{ a.service }}</td>
+      <td>{{ a.phone }}</td>
+      <td>
+        <form method="post" action="{{ url_for('delete', appt_id=a.id) }}" onsubmit="return confirm('Видалити запис?');">
+          <button class="btn btn-danger btn-sm">Видалити</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

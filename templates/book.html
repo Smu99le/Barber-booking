@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Запис до барбера</h1>
+
+<form method="post">
+  {{ form.csrf_token }}
+
+  <div class="mb-3">
+    {{ form.client_name.label }} {{ form.client_name(class="form-control") }}
+  </div>
+
+  <div class="mb-3">
+    {{ form.phone.label }} {{ form.phone(class="form-control") }}
+  </div>
+
+  <div class="mb-3">
+    <label for="service">Послуга</label>
+    <select name="service" id="service" class="form-select" required>
+      <option value="haircut">Стрижка</option>
+      <option value="beard">Борода</option>
+      <option value="combo">Стрижка+борода</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="date">Дата</label>
+    <input type="date" id="date" name="date" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="time">Доступний час для запису</label>
+    <select name="time" id="time" class="form-select" required>
+      <option value="">Оберіть дату та послугу</option>
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Записатися</button>
+</form>
+
+<script>
+function updateTimeOptions() {
+    const service = document.getElementById("service").value;
+    const date = document.getElementById("date").value;
+    const timeSelect = document.getElementById("time");
+    timeSelect.innerHTML = "";
+
+    if (!service || !date) return;
+
+    fetch(`/available_slots?service=${service}&date=${date}`)
+        .then(res => res.json())
+        .then(slots => {
+            if(slots.length === 0){
+                const opt = document.createElement("option");
+                opt.text = "Немає вільних слотів";
+                timeSelect.add(opt);
+                return;
+            }
+            slots.forEach(s => {
+                const opt = document.createElement("option");
+                opt.value = s;
+                opt.text = s;
+                timeSelect.add(opt);
+            });
+        });
+}
+
+document.getElementById("service").addEventListener("change", updateTimeOptions);
+document.getElementById("date").addEventListener("change", updateTimeOptions);
+</script>
+{% endblock %}

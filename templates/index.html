@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Майбутні записи</h1>
+
+{% if appts %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Дата/час початку</th>
+        <th>Клієнт</th>
+        <th>Послуга</th>
+        <th>Телефон</th>
+        <th>Тривалість</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in appts %}
+      <tr>
+        <td>{{ a.start_at.strftime("%Y-%m-%d %H:%M") }}</td>
+        <td>{{ a.client_name }}</td>
+        <td>{{ a.service }}</td>
+        <td>{{ a.phone }}</td>
+        <td>{{ ((a.end_at - a.start_at).seconds // 60) }} хв</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>Немає майбутніх записів.</p>
+{% endif %}
+
+{% endblock %}

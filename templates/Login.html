@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
+  <div class="card p-4 shadow-sm" style="width: 300px;">
+    <h4 class="text-center mb-3">Вхід до адмінки</h4>
+    <form method="post">
+      <div class="mb-3">
+        <label for="password" class="form-label">Пароль</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+      </div>
+      <button type="submit" class="btn btn-dark w-100">Увійти</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
